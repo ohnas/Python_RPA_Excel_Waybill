@@ -43,4 +43,10 @@ df = df.rename(
         "수량": "내품수량",
     }
 )
-df.to_excel("test_sample.xlsx", index=False)
+
+
+# 받는분섬명 , 받는분주소, 받는분전화번호 각각의 열의 중복값을 찾아서 bool 값으로 반환
+df = df.duplicated(subset=["받는분성명", "받는분주소(전체,분할)", "받는분전화번호"])
+print(df)
+
+# df.to_excel("test_sample.xlsx", index=False)
