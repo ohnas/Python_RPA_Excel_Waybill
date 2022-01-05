@@ -55,7 +55,10 @@ drop_df = rename_df.drop_duplicates(
 # rename_df 에서 받는분섬명 , 받는분주소, 받는분전화번호를 기준으로 중복데이터만 골라낸 가공된 dataframe
 duplicated_df = rename_df[
     rename_df.duplicated(keep=False, subset=["받는분성명", "받는분주소(전체,분할)", "받는분전화번호"])
+]
 
+# drop_df 와 duplicated_df 를 pd.concat 함수를 이용하여 병합하여, concat_df 로 만들어내기
+concat_df = pd.concat([drop_df, duplicated_df])
 
-drop_df.to_excel("test_sample.xlsx", index=False)
-duplicated_df.to_excel("test_sample1.xlsx", index=False)
+concat_df.to_excel("test_sample.xlsx", index=False)
+# duplicated_df.to_excel("test_sample1.xlsx", index=False)
