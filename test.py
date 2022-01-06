@@ -1,4 +1,24 @@
+import pymysql
 import pandas as pd
+import DB_auth
+
+# db 접속정보를 DB_auth.py에서 불러와서 입력해놓기
+conn = pymysql.connect(
+    db=DB_auth.info["db"],
+    host=DB_auth.info["host"],
+    user=DB_auth.info["user"],
+    password=DB_auth.info["password"],
+    port=DB_auth.info["port"],
+    charset=DB_auth.info["charset"],
+)
+
+# db에 접속해서 활동하기
+cur = conn.cursor()
+sql = "SELECT * FROM testtable"
+cur.execute(sql)
+
+conn.close()
+
 
 row_df = pd.read_excel("read_sample.xlsx", engine="openpyxl")
 select_df = row_df[
@@ -61,4 +81,4 @@ duplicated_df = rename_df[
 concat_df = pd.concat([drop_df, duplicated_df])
 
 concat_df.to_excel("test_sample.xlsx", index=False)
-# duplicated_df.to_excel("test_sample1.xlsx", index=False)
+duplicated_df.to_excel("test_sample1.xlsx", index=False)
