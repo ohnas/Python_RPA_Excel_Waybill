@@ -17,7 +17,7 @@ conn = pymysql.connect(
     charset=DB_auth.info["charset"],
 )
 
-row_df = pd.read_excel("read_sample1.xlsx", engine="openpyxl")
+row_df = pd.read_excel("read_sample.xlsx", engine="openpyxl")
 select_df = row_df[
     ["상품주문번호", "수취인명", "옵션정보", "수량", "수취인연락처1", "수취인연락처2", "배송지", "배송메세지"]
 ]
@@ -64,19 +64,20 @@ cur = conn.cursor(pymysql.cursors.DictCursor)
 sql = "SELECT * FROM testtable"
 cur.execute(sql)
 
+
 while True:
     db_row = cur.fetchone()
     if db_row == None:
         break
     for df_row in drop_df.to_dict("records"):
         if df_row["품목명"] == db_row["품목명"] and df_row["내품수량"] == db_row["내품수량"]:
-            drop_df.loc[df_row["고객주문번호"], "운임구분"] = db_row["운임구분"]
-            drop_df.loc[df_row["고객주문번호"], "박스타입"] = db_row["박스타입"]
-            drop_df.loc[df_row["고객주문번호"], "기본운임"] = db_row["기본운임"]
-            drop_df.loc[df_row["고객주문번호"], "보내는분성명"] = db_row["보내는분성명"]
-            drop_df.loc[df_row["고객주문번호"], "보내는분주소(전체, 분할)"] = db_row["보내는분주소(전체, 분할)"]
-            drop_df.loc[df_row["고객주문번호"], "보내는분전화번호"] = db_row["보내는분전화번호"]
-            drop_df.loc[df_row["고객주문번호"], "보내는분기타연락처"] = db_row["보내는분기타연락처"]
+            drop_df.at[df_row["고객주문번호"], "운임구분"] = db_row["운임구분"]
+            drop_df.at[df_row["고객주문번호"], "박스타입"] = db_row["박스타입"]
+            drop_df.at[df_row["고객주문번호"], "기본운임"] = db_row["기본운임"]
+            drop_df.at[df_row["고객주문번호"], "보내는분성명"] = db_row["보내는분성명"]
+            drop_df.at[df_row["고객주문번호"], "보내는분주소(전체, 분할)"] = db_row["보내는분주소(전체, 분할)"]
+            drop_df.at[df_row["고객주문번호"], "보내는분전화번호"] = db_row["보내는분전화번호"]
+            drop_df.at[df_row["고객주문번호"], "보내는분기타연락처"] = db_row["보내는분기타연락처"]
         else:
             continue
 
