@@ -4,7 +4,7 @@ import pymysql
 import pandas as pd
 import DB_auth
 
-start = time.time()
+# start = time.time()
 
 
 def save_file():
@@ -140,4 +140,4 @@ def save_file():
     return concat_df.to_excel("test_sample.xlsx", index=False)
 
 
-print(time.time() - start)
+# print(time.time() - start)
