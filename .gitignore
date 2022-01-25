@@ -1,3 +1,4 @@
 *.xlsx
 .vscode/
 DB_auth.py
+practice.py
