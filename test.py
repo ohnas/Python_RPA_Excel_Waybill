@@ -1,10 +1,7 @@
 from os import dup, rename
-import time
 import pymysql
 import pandas as pd
 import DB_auth
-
-start = time.time()
 
 
 def save_file():
@@ -138,6 +135,3 @@ def save_file():
     conn.close()
     # concat_df를 엑셀파일로 만들어내기
     return concat_df.to_excel("test_sample.xlsx", index=False)
-
-
-print(time.time() - start)

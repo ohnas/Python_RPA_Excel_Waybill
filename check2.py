@@ -1,11 +1,9 @@
 from os import dup, rename
-import time
 import pymysql
 import pandas as pd
 import numpy as np
 import DB_auth
 
-start = time.time()
 
 # db 접속정보를 DB_auth.py에서 불러와서 입력해놓기
 conn = pymysql.connect(
@@ -70,12 +68,14 @@ duplicated_df = set_index_df[
     set_index_df.duplicated(keep=False, subset=["받는분성명", "받는분주소(전체,분할)", "받는분전화번호"])
 ]
 
+
 # duplicated_df 에서 중복값중 첫번째값만 남기기(이유는 index 값을 하나만 얻기 위해서 index 값이 2개면 중복으로 불러오기 때문에)
 duplicated_df_first = duplicated_df.drop_duplicates(
     keep="first", subset=["받는분성명", "받는분주소(전체,분할)", "받는분전화번호"]
 )
 
 # multi db 데이터와 duplicated_df 데이터를 db 에 등록된 데이터가 있는지 비교하기
+df_get_index_list = []
 for df_row in duplicated_df_first.to_dict("records"):
     new_df = duplicated_df.loc[df_row["고객주문번호"], :]
     reset_index_df = new_df.reset_index(drop=True)[["품목명", "내품수량"]]
@@ -92,13 +92,17 @@ for df_row in duplicated_df_first.to_dict("records"):
             df_get_index = list(
                 new_df.index
             )  # 존재하는 데이터를 찾았다면 존재하는 df 의 index 값을 리스트로 반환
-            duplicated_df_drop_df = duplicated_df.drop(
+            df_get_index_list.append(
                 df_get_index
-            )  # index 값으로 duplicated_df 에서 존재하는 df 를 drop
+            )  # 찾은 index 값을 df_get_index_list 에 append
         else:
             continue
 
-duplicated_df_drop_df_first = duplicated_df_drop_df.drop_duplicates(
+# 존재하는 데이터의 index 값으로 duplicated_df 에서 drop 시키기
+for row in df_get_index_list:
+    duplicated_df = duplicated_df.drop(row)
+
+duplicated_df_drop_df_first = duplicated_df.drop_duplicates(
     keep="first", subset=["고객주문번호"]
 )
 
@@ -112,7 +116,7 @@ for df_row in duplicated_df_drop_df_first.to_dict("records"):
     multi_table_maxid = db_cursor.fetchone()
     db_cursor.close()
     index_value = multi_table_maxid["MAX(id)"] + 1  # 가장 큰 id 값보다 1 증가한  id로 만들기
-    new_df = duplicated_df_drop_df.loc[df_row["고객주문번호"], :]
+    new_df = duplicated_df.loc[df_row["고객주문번호"], :]
     new_df["고객주문번호"] = index_value  # 기존 인덱스 값을 가장 큰 id +1 값으로 변경
     reset_index_df = new_df.reset_index(drop=True)[["고객주문번호", "품목명", "내품수량"]]
     result = reset_index_df.to_dict("records")
@@ -138,5 +142,3 @@ for df_row in duplicated_df_drop_df_first.to_dict("records"):
 
 # db 접속 끊기
 conn.close()
-
-print(time.time() - start)
