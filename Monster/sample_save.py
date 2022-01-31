@@ -4,7 +4,7 @@ import pandas as pd
 import DB_auth
 
 
-def save_file():
+def waybill_sample_save_file():
     # db 접속정보를 DB_auth.py에서 불러와서 입력해놓기
     conn = pymysql.connect(
         db=DB_auth.info["db"],
