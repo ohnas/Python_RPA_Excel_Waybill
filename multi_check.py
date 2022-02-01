@@ -2,7 +2,7 @@ from os import dup, rename
 import pymysql
 import pandas as pd
 import numpy as np
-import DB_auth
+import DB_auth as DB_auth
 
 
 def multi_table_check():

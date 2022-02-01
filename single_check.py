@@ -1,18 +1,25 @@
+# import os
+# import sys
+
+# 상위 폴더에 있는 패키지와 모듈 찾는 경로 설정
+# sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 import pymysql
 import pandas as pd
-import DB_auth
+
+from DB_auth import db_info
+
+info = db_info()
+conn = pymysql.connect(
+    db=info["db"],
+    host=info["host"],
+    user=info["user"],
+    password=info["password"],
+    port=info["port"],
+    charset=info["charset"],
+)
 
 
 def single_table_check():
-    conn = pymysql.connect(
-        db=DB_auth.info["db"],
-        host=DB_auth.info["host"],
-        user=DB_auth.info["user"],
-        password=DB_auth.info["password"],
-        port=DB_auth.info["port"],
-        charset=DB_auth.info["charset"],
-    )
-
     db_cursor = conn.cursor(pymysql.cursors.DictCursor)
     single_sql = "SELECT * FROM single_table"
     db_cursor.execute(single_sql)
@@ -82,25 +89,6 @@ def single_table_check():
     for item in new_items:
         if item not in new_items_list:
             new_items_list.append(item)
-
-    # new_items_list 에서 값을 하나씩 가져와서 db_single_table 의 max id 값보다 1씩 증가시켜서 db insert 시키기
-    # for item in new_items_list:
-    # db_cursor = conn.cursor(pymysql.cursors.DictCursor)
-    # get_maxid_single_sql = (
-    # "SELECT MAX(id) FROM single_table"  # singel table에서 가장 큰 id 값 조회
-    # )
-    # db_cursor.execute(get_maxid_single_sql)
-    # single_table_maxid = db_cursor.fetchone()
-    # db_cursor.close()
-    # index_value = single_table_maxid["MAX(id)"] + 1  # 가장 큰 id 값보다 1 증가한  id로 만들기
-    # post_item = (index_value, item[0], item[1])
-    # db_insert_cursor = conn.cursor()
-    # insert_single_sql = (
-    # "INSERT INTO single_table(id, 품목명, 내품수량) VALUES (%s, %s , %s) "
-    # )
-    # db_insert_cursor.execute(insert_single_sql, post_item)
-    # db_insert_cursor.close()
-    # conn.commit()
 
     # db 접속 끊기
     conn.close()

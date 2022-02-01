@@ -1,13 +1,10 @@
-from Monster.single_check import single_table_check
-
-import os
-import tkinter.ttk as ttk
-import tkinter.messagebox as msgbox
 from tkinter import *
 from tkinter import filedialog
-from turtle import right, width
+import tkinter.ttk as ttk
+import tkinter.messagebox as msgbox
 
-from click import command
+from single_check import single_table_check
+from single_insert import single_table_isert
 
 
 def check_list():
@@ -38,7 +35,7 @@ def save_button():
     selection_item.append(selection_type)
     selection_item.append(selection_price)
     selection_items = tuple(selection_item)
-    print(selection_items)
+    single_table_isert(selection_items)
 
 
 window = Tk()
@@ -49,6 +46,7 @@ window.resizable(True, True)
 select_frame = Frame(window)
 select_frame.pack(fill="x")
 
+############ check_list btn ################
 check_file_button = Button(
     select_frame,
     overrelief="solid",
@@ -60,7 +58,8 @@ check_file_button = Button(
     command=check_list,
 )
 check_file_button.pack(side="left")
-
+############################################
+############ list box #####################
 list_frame = LabelFrame(window, text="단품 항목", padx=5, pady=5)
 list_frame.pack(fill="both")
 
@@ -84,7 +83,8 @@ move_btn = Button(
     command=move_button,
 )
 move_btn.pack(side="bottom")
-
+############################################
+############ select_option #################
 frame_option = LabelFrame(window, text="선택항목")
 frame_option.pack(padx=5, pady=5, fill="both")
 
@@ -121,5 +121,5 @@ label_price.pack(side="left", padx=5, pady=5)
 option_price = [2050, 2050, 2050, 2050, 2050]
 combobox_price = ttk.Combobox(frame_option, state="readonly", values=option_price)
 combobox_price.pack(side="left", padx=5, pady=5)
-
+############################################
 window.mainloop()

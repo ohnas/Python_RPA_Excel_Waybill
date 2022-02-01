@@ -1,7 +1,7 @@
 from os import dup, rename
 import pymysql
 import pandas as pd
-import DB_auth
+import DB_auth as DB_auth
 
 
 def waybill_sample_save_file():
