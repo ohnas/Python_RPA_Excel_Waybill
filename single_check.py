@@ -8,18 +8,17 @@ import pandas as pd
 
 from DB_auth import db_info
 
-info = db_info()
-conn = pymysql.connect(
-    db=info["db"],
-    host=info["host"],
-    user=info["user"],
-    password=info["password"],
-    port=info["port"],
-    charset=info["charset"],
-)
-
 
 def single_table_check():
+    info = db_info()
+    conn = pymysql.connect(
+        db=info["db"],
+        host=info["host"],
+        user=info["user"],
+        password=info["password"],
+        port=info["port"],
+        charset=info["charset"],
+    )
     db_cursor = conn.cursor(pymysql.cursors.DictCursor)
     single_sql = "SELECT * FROM single_table"
     db_cursor.execute(single_sql)

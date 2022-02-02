@@ -7,8 +7,9 @@ from single_check import single_table_check
 from single_insert import single_table_isert
 
 
-def check_list():
-    new_items_list = single_table_check()
+def is_single_new_item_check():
+    new_items_list = single_table_check()  # single_table_check 함수에서 return 값 받아옴
+    # 받아온 리스트에 항목이 없으면 메시지 띄우기 항목이 있으면 리스트 박스에 표시하기
     if len(new_items_list) == 0:
         msgbox.showinfo("알림", "새로운 항목이 없습니다.")
     else:
@@ -17,25 +18,35 @@ def check_list():
 
 
 def move_button():
-    selection_item = list_file.curselection()
-    selection_item_list = list(list_file.get(selection_item[0]))
-    label_product_name.insert(0, selection_item_list[0])
-    label_quantity_name.insert(0, selection_item_list[1])
-    list_file.delete(selection_item)
+    selection_item = (
+        list_file.curselection()
+    )  # 리스트 박스에서 선택한 아이템 선택 method는 curselection
+    selection_item_list = list(
+        list_file.get(selection_item[0])
+    )  # 선택한 항목의 값으 get() 하고 list로 변환
+    label_product_name.insert(0, selection_item_list[0])  # 리스트에서 품목명은 품목명 Entry 로 보내기
+    label_quantity_name.insert(0, selection_item_list[1])  # 리스트에서 수량은 수량 Entry 로 보내기
+    list_file.delete(selection_item)  # 보내기가 완료되었다면 선택했었던 항목은 지워버리기
 
 
 def save_button():
-    selection_product = label_product_name.get()
-    selection_quantity = int(label_quantity_name.get())
-    selection_type = combobox_type.get()
-    selection_price = int(combobox_price.get())
+    selection_product = label_product_name.get()  # 보낸 품목명의 값을 가져오기 get()
+    selection_quantity = int(label_quantity_name.get())  # 보낸 수량의 값을 가져오기 get()
+    selection_type = combobox_type.get()  # combobox에서 고른 값 가져오기 get()
+    selection_price = int(combobox_price.get())  # combobox에서 고른 값 가져오기 get()
     selection_item = []
-    selection_item.append(selection_product)
-    selection_item.append(selection_quantity)
-    selection_item.append(selection_type)
-    selection_item.append(selection_price)
-    selection_items = tuple(selection_item)
-    single_table_isert(selection_items)
+    selection_item.append(selection_product)  # get 한 값들 빈 리스트에 append
+    selection_item.append(selection_quantity)  # get 한 값들 빈 리스트에 append
+    selection_item.append(selection_type)  # get 한 값들 빈 리스트에 append
+    selection_item.append(selection_price)  # get 한 값들 빈 리스트에 append
+    selection_items = tuple(
+        selection_item
+    )  # 리스트 값들 전부 tuple로 변환(데이터 베이스로 insert 하기 위해서)
+    single_table_isert(selection_items)  # 변환시킨 tuple을 single_table_insert 함수의 인자로 보내기
+    label_product_name.delete(0, END)  # 표시되어 있는 품목명 delete
+    label_quantity_name.delete(0, END)  # 표시되어 있는 수량 delete
+    combobox_type.current(0)  # 표시되어 있는 combobox 항목 초기화
+    combobox_price.current(0)  # 표시되어 있는 combobox 항목 초기화
 
 
 window = Tk()
@@ -55,7 +66,7 @@ check_file_button = Button(
     height=2,
     padx=2,
     pady=2,
-    command=check_list,
+    command=is_single_new_item_check,
 )
 check_file_button.pack(side="left")
 ############################################
@@ -112,14 +123,16 @@ label_quantity_name.pack(side="left", padx=5, pady=5)
 
 label_type = Label(frame_option, text="박스타입 :")
 label_type.pack(side="left", padx=5, pady=5)
-option_type = ["극소", "소", "중", "대", "이형"]
+option_type = ["선택", "극소", "소", "중", "대", "이형"]
 combobox_type = ttk.Combobox(frame_option, state="readonly", values=option_type)
+combobox_type.current(0)
 combobox_type.pack(side="left", padx=5, pady=5)
 
 label_price = Label(frame_option, text="기본운임 :")
 label_price.pack(side="left", padx=5, pady=5)
-option_price = [2050, 2050, 2050, 2050, 2050]
+option_price = ["선택", 2050, 2050, 2050, 2050, 2050]
 combobox_price = ttk.Combobox(frame_option, state="readonly", values=option_price)
+combobox_price.current(0)
 combobox_price.pack(side="left", padx=5, pady=5)
 ############################################
 window.mainloop()

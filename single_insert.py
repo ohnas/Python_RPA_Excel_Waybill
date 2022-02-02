@@ -2,19 +2,17 @@ import pymysql
 
 from DB_auth import db_info
 
-info = db_info()
-conn = pymysql.connect(
-    db=info["db"],
-    host=info["host"],
-    user=info["user"],
-    password=info["password"],
-    port=info["port"],
-    charset=info["charset"],
-)
-
-
+# gui 에서 받아온 tuple 을 인자로 사용하는 insert 함수
 def single_table_isert(selection_items):
-    # new_items_list 에서 값을 하나씩 가져와서 db_single_table 의 max id 값보다 1씩 증가시켜서 db insert 시키기
+    info = db_info()
+    conn = pymysql.connect(
+        db=info["db"],
+        host=info["host"],
+        user=info["user"],
+        password=info["password"],
+        port=info["port"],
+        charset=info["charset"],
+    )
     db_cursor = conn.cursor(pymysql.cursors.DictCursor)
     get_maxid_single_sql = (
         "SELECT MAX(id) FROM single_table"  # singel table에서 가장 큰 id 값 조회
@@ -36,4 +34,4 @@ def single_table_isert(selection_items):
     db_insert_cursor.close()
     conn.commit()
     # db 접속 끊기
-    conn.close()
+    return conn.close()
