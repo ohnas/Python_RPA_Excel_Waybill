@@ -2,18 +2,19 @@ from os import dup, rename
 import pymysql
 import pandas as pd
 import numpy as np
-import DB_auth as DB_auth
+from DB_auth import db_info
 
 
 def multi_table_check():
     # db 접속정보를 DB_auth.py에서 불러와서 입력해놓기
+    info = db_info()
     conn = pymysql.connect(
-        db=DB_auth.info["db"],
-        host=DB_auth.info["host"],
-        user=DB_auth.info["user"],
-        password=DB_auth.info["password"],
-        port=DB_auth.info["port"],
-        charset=DB_auth.info["charset"],
+        db=info["db"],
+        host=info["host"],
+        user=info["user"],
+        password=info["password"],
+        port=info["port"],
+        charset=info["charset"],
     )
 
     # db 에서 multi table 에서 data 불러오기
@@ -106,44 +107,46 @@ def multi_table_check():
     for row in df_get_index_list:
         duplicated_df = duplicated_df.drop(row)
 
-    duplicated_df_drop_df_first = duplicated_df.drop_duplicates(
-        keep="first", subset=["고객주문번호"]
-    )
-
-    # db에 존재하지 않는 새로운 df를 db에 새롭게 저장
-    for df_row in duplicated_df_drop_df_first.to_dict("records"):
-        db_cursor = conn.cursor(pymysql.cursors.DictCursor)
-        get_maxid_multi_sql = (
-            "SELECT MAX(id) FROM multi_table"  # multi table에서 가장 큰 id 값 조회
-        )
-        db_cursor.execute(get_maxid_multi_sql)
-        multi_table_maxid = db_cursor.fetchone()
-        db_cursor.close()
-        index_value = multi_table_maxid["MAX(id)"] + 1  # 가장 큰 id 값보다 1 증가한  id로 만들기
-        new_df = duplicated_df.loc[df_row["고객주문번호"], :]
-        new_df["고객주문번호"] = index_value  # 기존 인덱스 값을 가장 큰 id +1 값으로 변경
-        reset_index_df = new_df.reset_index(drop=True)[["고객주문번호", "품목명", "내품수량"]]
-        result = reset_index_df.to_dict("records")
-        new_items_list = []
-        for r in result:
-            order_number = np.int64(
-                r["고객주문번호"]
-            )  # np.int64를 하는 이유는 mysql 이 numpy.int64 type을 받아들이지 못함
-            product_name = r["품목명"]
-            quantity = np.int64(r["내품수량"])
-            item = (
-                order_number.item(),
-                product_name,
-                quantity.item(),
-            )  # np.int64 후 item 메소드를 이용하여 python int type으로 변경
-            new_items_list.append(item)
-        new_items_tuple = tuple(new_items_list)
-        db_insert_cursor = conn.cursor()
-        insert_multi_sql = "insert into multi_table(id, 품목명, 내품수량) values (%s, %s, %s)"
-        db_insert_cursor.executemany(insert_multi_sql, new_items_tuple)
-        db_insert_cursor.close()
-        conn.commit()
-
+    new_items_list = duplicated_df[["고객주문번호", "받는분성명", "품목명", "내품수량"]].values.tolist()
     # db 접속 끊기
     conn.close()
-    return
+    return new_items_list
+
+
+""" duplicated_df_drop_df_first = duplicated_df.drop_duplicates(
+    keep="first", subset=["고객주문번호"]
+)
+
+# db에 존재하지 않는 새로운 df를 db에 새롭게 저장
+for df_row in duplicated_df_drop_df_first.to_dict("records"):
+    db_cursor = conn.cursor(pymysql.cursors.DictCursor)
+    get_maxid_multi_sql = (
+        "SELECT MAX(id) FROM multi_table"  # multi table에서 가장 큰 id 값 조회
+    )
+    db_cursor.execute(get_maxid_multi_sql)
+    multi_table_maxid = db_cursor.fetchone()
+    db_cursor.close()
+    index_value = multi_table_maxid["MAX(id)"] + 1  # 가장 큰 id 값보다 1 증가한  id로 만들기
+    new_df = duplicated_df.loc[df_row["고객주문번호"], :]
+    new_df["고객주문번호"] = index_value  # 기존 인덱스 값을 가장 큰 id +1 값으로 변경
+    reset_index_df = new_df.reset_index(drop=True)[["고객주문번호", "품목명", "내품수량"]]
+    result = reset_index_df.to_dict("records")
+    new_items_list = []
+    for r in result:
+        order_number = np.int64(
+            r["고객주문번호"]
+        )  # np.int64를 하는 이유는 mysql 이 numpy.int64 type을 받아들이지 못함
+        product_name = r["품목명"]
+        quantity = np.int64(r["내품수량"])
+        item = (
+            order_number.item(),
+            product_name,
+            quantity.item(),
+        )  # np.int64 후 item 메소드를 이용하여 python int type으로 변경
+        new_items_list.append(item)
+    new_items_tuple = tuple(new_items_list)
+    db_insert_cursor = conn.cursor()
+    insert_multi_sql = "insert into multi_table(id, 품목명, 내품수량) values (%s, %s, %s)"
+    db_insert_cursor.executemany(insert_multi_sql, new_items_tuple)
+    db_insert_cursor.close()
+    conn.commit() """
