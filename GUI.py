@@ -6,6 +6,7 @@ from tkinter import messagebox as msgbox
 from single_check import single_table_check
 from single_insert import single_table_isert
 from multi_check import multi_table_check
+from multi_insert import multi_table_isert
 
 
 def is_single_new_item_check():
@@ -69,9 +70,11 @@ def multi_move_button():
         multi_list.curselection()
     )  # 리스트 박스에서 선택한 아이템 선택 method는 curselection
     selection_item_list = []
+    # 선택한 아이템의 값을 get 해서 list 로 만들기
     for item in selection_item:
         get_item = multi_list.get(item)
         selection_item_list.append(get_item)
+    # list로 만든 아이템들을 listbox 로 insert
     for item in selection_item_list:
         multi_label_product_name.insert(END, item[2])
         multi_label_quantity_name.insert(END, item[3])
@@ -81,13 +84,14 @@ def multi_move_button():
 def multi_save_button():
     selection_product = list(
         multi_label_product_name.get(0, END)
-    )  # 보낸 품목명의 값을 가져오기 get()
+    )  # 보낸 품목명의 값을 가져오기 get() 해서 list
     selection_quantity = list(
         multi_label_quantity_name.get(0, END)
-    )  # 보낸 수량의 값을 가져오기 get()
+    )  # 보낸 수량의 값을 가져오기 get() 해서 list
     selection_type = multi_combobox_type.get()  # combobox에서 고른 값 가져오기 get()
     selection_price = int(multi_combobox_price.get())  # combobox에서 고른 값 가져오기 get()
     selection_items = []
+    # 각각의 독립적인 list 들을 하나의 list 작업 하기
     while len(selection_product) != 0 and len(selection_quantity) != 0:
         selection_item = []
         selection_item.append(selection_product[0])
@@ -97,7 +101,11 @@ def multi_save_button():
         selection_items.append(selection_item)
         del selection_product[0]
         del selection_quantity[0]
-    print(selection_items)
+    multi_table_isert(selection_items)  # list로 만든 값들을 multi_table_insert 함수의 인자로 보내기
+    multi_label_product_name.delete(0, END)  # 표시되어 있는 품목명 delete
+    multi_label_quantity_name.delete(0, END)  # 표시되어 있는 수량 delete
+    multi_combobox_type.current(0)  # 표시되어 있는 combobox 항목 초기화
+    multi_combobox_price.current(0)  # 표시되어 있는 combobox 항목 초기화
 
 
 window = Tk()
@@ -105,10 +113,10 @@ window.title("Tkinte_Test")
 window.geometry("1080x1000")
 window.resizable(True, True)
 
+############ single_check_list btn ################
 single_frame = Frame(window)
 single_frame.pack(fill="x")
 
-############ single_check_list btn ################
 single_check_button = Button(
     single_frame,
     overrelief="solid",
