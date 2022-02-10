@@ -8,8 +8,7 @@ import pandas as pd
 
 from DB_auth import db_info
 
-
-def single_table_check():
+def single_table_check(filename):
     info = db_info()
     conn = pymysql.connect(
         db=info["db"],
@@ -27,8 +26,8 @@ def single_table_check():
     db_single_df = pd.DataFrame(single_table_rows)
     db_cursor.close()
 
-    # 원본 excel file 가져와서 Dataframe 으로 만들기
-    row_df = pd.read_excel("read_sample.xlsx", engine="openpyxl")
+    # 선택한 excel file 가져와서 Dataframe 으로 만들기
+    row_df = pd.read_excel(f"{filename}", engine="openpyxl")
 
     # row_df 에서 원하는 column 만 가져오기
     select_df = row_df[

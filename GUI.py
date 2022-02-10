@@ -9,8 +9,20 @@ from multi_check import multi_table_check
 from multi_insert import multi_table_isert
 
 
+def smart_store_file_add():
+    filename = filedialog.askopenfilename(
+        title="스마트스토어 파일을 선택하세요",
+        filetypes=(("EXCEL 파일", "*.xlsx"), ("모든파일", "*.*")),
+        initialdir="C:\\Users\\오나성\Desktop\\Python_RPA_Excel_Waybill",
+    )
+    samrt_store_file_label_name.insert(0, filename)
+
+
 def is_single_new_item_check():
-    new_items_list = single_table_check()  # single_table_check 함수에서 return 값 받아옴
+    filename = samrt_store_file_label_name.get()
+    new_items_list = single_table_check(
+        filename
+    )  # single_table_check 함수에서 return 값 받아옴
     # 받아온 리스트에 항목이 없으면 메시지 띄우기 항목이 있으면 리스트 박스에 표시하기
     if len(new_items_list) == 0:
         msgbox.showinfo("알림", "새로운 항목이 없습니다.")
@@ -56,7 +68,8 @@ def single_save_button():
 
 
 def is_multi_new_item_check():
-    new_items_list = multi_table_check()  # single_table_check 함수에서 return 값 받아옴
+    filename = samrt_store_file_label_name.get()
+    new_items_list = multi_table_check(filename)  # single_table_check 함수에서 return 값 받아옴
     # 받아온 리스트에 항목이 없으면 메시지 띄우기 항목이 있으면 리스트 박스에 표시하기
     if len(new_items_list) == 0:
         msgbox.showinfo("알림", "새로운 항목이 없습니다.")
@@ -112,6 +125,26 @@ window = Tk()
 window.title("Tkinte_Test")
 window.geometry("1080x1000")
 window.resizable(True, True)
+
+smart_store_frame = Frame(window)
+smart_store_frame.pack(fill="x")
+
+smart_store_file_add_button = Button(
+    smart_store_frame,
+    overrelief="solid",
+    text="스마트스토어 파일 선택",
+    width=20,
+    height=2,
+    padx=2,
+    pady=2,
+    command=smart_store_file_add,
+)
+smart_store_file_add_button.pack(side="left")
+
+samrt_store_file_label = Label(smart_store_frame, text="선택된 파일명 :")
+samrt_store_file_label.pack(side="left", padx=5, pady=5)
+samrt_store_file_label_name = Entry(smart_store_frame, width=60)
+samrt_store_file_label_name.pack(side="left", padx=5, pady=5)
 
 ############ single_check_list btn ################
 single_frame = Frame(window)
