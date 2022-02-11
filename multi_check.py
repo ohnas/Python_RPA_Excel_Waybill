@@ -31,7 +31,7 @@ def multi_table_check(filename):
 
     db_cursor.close()
 
-    # 원본 excel file 가져와서 Dataframe 으로 만들기
+    # 선택된 excel file 가져와서 Dataframe 으로 만들기
     row_df = pd.read_excel(f"{filename}", engine="openpyxl")
 
     # row_df 에서 원하는 column 만 가져오기

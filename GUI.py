@@ -122,15 +122,16 @@ def multi_save_button():
 
 
 window = Tk()
-window.title("Tkinte_Test")
+window.title("Tkinter_Test")
 window.geometry("1080x1000")
 window.resizable(True, True)
 
 smart_store_frame = Frame(window)
-smart_store_frame.pack(fill="x")
+smart_store_frame.pack(fill="x", padx=10, pady=20)
 
 smart_store_file_add_button = Button(
     smart_store_frame,
+    relief="raised",
     overrelief="solid",
     text="스마트스토어 파일 선택",
     width=20,
@@ -147,23 +148,23 @@ samrt_store_file_label_name = Entry(smart_store_frame, width=60)
 samrt_store_file_label_name.pack(side="left", padx=5, pady=5)
 
 ############ single_check_list btn ################
-single_frame = Frame(window)
-single_frame.pack(fill="x")
+single_frame = LabelFrame(window, text="단품 항목", padx=5, pady=5)
+single_frame.pack(fill="x", padx=10, pady=20)
 
 single_check_button = Button(
     single_frame,
+    relief="raised",
     overrelief="solid",
     text="스마트스토어 단품 체크",
-    width=20,
+    width=50,
     height=2,
-    padx=2,
     pady=2,
     command=is_single_new_item_check,
 )
-single_check_button.pack(side="left")
+single_check_button.pack()
 ############################################
 ############ single_list box #####################
-single_list_frame = LabelFrame(window, text="단품 항목", padx=5, pady=5)
+single_list_frame = LabelFrame(single_frame, text="신규 단품 항목", padx=5, pady=5)
 single_list_frame.pack(fill="both")
 
 single_scrollbar = Scrollbar(single_list_frame)
@@ -172,7 +173,7 @@ single_scrollbar.pack(side="right", fill="y")
 single_list = Listbox(
     single_list_frame,
     selectmode="extended",
-    height=7,
+    height=5,
     yscrollcommand=single_scrollbar.set,
 )
 single_list.pack(side="left", fill="both", expand=True)
@@ -180,6 +181,7 @@ single_scrollbar.config(command=single_list.yview)
 ############ single_move button #####################
 single_move_btn = Button(
     single_list_frame,
+    relief="raised",
     overrelief="solid",
     text="선택",
     width=5,
@@ -191,11 +193,12 @@ single_move_btn = Button(
 single_move_btn.pack(side="bottom")
 ###################################################
 ############ single_select_option_save #################
-single_option = LabelFrame(window, text="선택항목")
+single_option = LabelFrame(single_frame, text="선택항목")
 single_option.pack(padx=5, pady=5, fill="both")
 
 single_save_btn = Button(
     single_option,
+    relief="raised",
     overrelief="solid",
     text="저장",
     width=10,
@@ -235,23 +238,23 @@ single_combobox_price.current(0)
 single_combobox_price.pack(side="left", padx=5, pady=5)
 #####################################################################################
 ############ multi_check_list btn ################
-multi_frame = Frame(window)
-multi_frame.pack(fill="x")
+multi_frame = LabelFrame(window, text="합포 항목", padx=5, pady=5)
+multi_frame.pack(fill="x", padx=10, pady=20)
 
 multi_check_button = Button(
     multi_frame,
+    relief="raised",
     overrelief="solid",
     text="스마트스토어 합포 체크",
-    width=20,
+    width=50,
     height=2,
-    padx=2,
     pady=2,
     command=is_multi_new_item_check,
 )
-multi_check_button.pack(side="left")
+multi_check_button.pack()
 ############################################
 ############ multi_list box #####################
-multi_list_frame = LabelFrame(window, text="합포 항목", padx=5, pady=5)
+multi_list_frame = LabelFrame(multi_frame, text="신규 합포 항목", padx=5, pady=5)
 multi_list_frame.pack(fill="both")
 
 multi_scrollbar = Scrollbar(multi_list_frame)
@@ -260,7 +263,7 @@ multi_scrollbar.pack(side="right", fill="y")
 multi_list = Listbox(
     multi_list_frame,
     selectmode="extended",
-    height=20,
+    height=10,
     yscrollcommand=multi_scrollbar.set,
 )
 multi_list.pack(side="left", fill="both", expand=True)
@@ -269,6 +272,7 @@ multi_scrollbar.config(command=multi_list.yview)
 ############ multi_move button #####################
 multi_move_btn = Button(
     multi_list_frame,
+    relief="raised",
     overrelief="solid",
     text="선택",
     width=5,
@@ -280,11 +284,12 @@ multi_move_btn = Button(
 multi_move_btn.pack(side="bottom")
 ###################################################
 ############ multi_select_option_save #################
-multi_option = LabelFrame(window, text="선택항목")
+multi_option = LabelFrame(multi_frame, text="선택항목")
 multi_option.pack(padx=5, pady=5, fill="both")
 
 multi_save_btn = Button(
     multi_option,
+    relief="raised",
     overrelief="solid",
     text="저장",
     width=10,
