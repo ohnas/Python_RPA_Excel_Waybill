@@ -7,6 +7,7 @@ from smartstore_single_check import single_table_check
 from smartstore_single_insert import single_table_isert
 from smartstore_multi_check import multi_table_check
 from smartstore_multi_insert import multi_table_isert
+from smartstore_sample_save import sample_save
 
 
 class Smartstore:
@@ -136,6 +137,15 @@ class Smartstore:
         multi_combobox_type.current(0)  # 표시되어 있는 combobox 항목 초기화
         multi_combobox_price.current(0)  # 표시되어 있는 combobox 항목 초기화
 
+    def sample_file_save(self):
+        self.openfilename = file_label_name.get()
+        self.savefilename = filedialog.asksaveasfilename(
+            title="스마트스토어 파일을 선택하세요",
+            filetypes=(("EXCEL 파일", "*.xlsx"), ("모든파일", "*.*")),
+            initialdir="C:\\Users\\오나성\Desktop\\Python_RPA_Excel_Waybill",
+        )
+        sample_save(self.openfilename, self.savefilename)
+
 
 app = Smartstore()
 
@@ -144,6 +154,7 @@ window.title("Tkinter_Test")
 window.geometry("1080x1000")
 window.resizable(True, True)
 
+############ file_add ################
 file_frame = LabelFrame(window, text="파일", padx=5, pady=5)
 file_frame.pack(fill="x", padx=10, pady=20)
 
@@ -177,7 +188,7 @@ file_label = Label(file_frame, text="선택된 파일명 :")
 file_label.pack(side="left", padx=5, pady=5)
 file_label_name = Entry(file_frame, width=60)
 file_label_name.pack(side="left", padx=5, pady=5)
-
+###################################################
 ############ single_check_list btn ################
 single_frame = LabelFrame(window, text="단품 항목", padx=5, pady=5)
 single_frame.pack(fill="x", padx=10, pady=20)
@@ -193,7 +204,7 @@ single_check_button = Button(
     command=app.is_single_new_item_check,
 )
 single_check_button.pack()
-############################################
+##################################################
 ############ single_list box #####################
 single_list_frame = LabelFrame(single_frame, text="신규 단품 항목", padx=5, pady=5)
 single_list_frame.pack(fill="both")
@@ -359,5 +370,21 @@ multi_combobox_price = ttk.Combobox(
 multi_combobox_price.current(0)
 multi_combobox_price.pack(side="left", padx=5, pady=5)
 #####################################################################################
+############ sample_file_save ################
+save_file_frame = LabelFrame(window, text="샘플파일", padx=5, pady=5)
+save_file_frame.pack(fill="x", padx=10, pady=20)
 
+save_sampel_file_button = Button(
+    save_file_frame,
+    relief="raised",
+    overrelief="solid",
+    text="CJ대한통운 샘플 파일 생성",
+    width=25,
+    height=2,
+    padx=2,
+    pady=2,
+    command=app.sample_file_save,
+)
+save_sampel_file_button.pack(side="left")
+#####################################################################################
 window.mainloop()

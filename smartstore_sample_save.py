@@ -1,18 +1,19 @@
-from os import dup, rename
 import pymysql
 import pandas as pd
-import DB_auth as DB_auth
+
+from DB_auth import db_info
 
 
-def waybill_sample_save_file():
+def sample_save(openfilename, savefilename):
     # db 접속정보를 DB_auth.py에서 불러와서 입력해놓기
+    info = db_info()
     conn = pymysql.connect(
-        db=DB_auth.info["db"],
-        host=DB_auth.info["host"],
-        user=DB_auth.info["user"],
-        password=DB_auth.info["password"],
-        port=DB_auth.info["port"],
-        charset=DB_auth.info["charset"],
+        db=info["db"],
+        host=info["host"],
+        user=info["user"],
+        password=info["password"],
+        port=info["port"],
+        charset=info["charset"],
     )
 
     # db 에서 single table 에서 data 불러오기
@@ -39,7 +40,7 @@ def waybill_sample_save_file():
     db_cursor.close()
 
     # 원본 excel file 가져와서 Dataframe 으로 만들기
-    row_df = pd.read_excel("read_sample.xlsx", engine="openpyxl")
+    row_df = pd.read_excel(f"{openfilename}", engine="openpyxl")
 
     # row_df 에서 원하는 column 만 가져오기
     select_df = row_df[
@@ -134,4 +135,4 @@ def waybill_sample_save_file():
     # db 접속 끊기
     conn.close()
     # concat_df를 엑셀파일로 만들어내기
-    return concat_df.to_excel("test_sample.xlsx", index=False)
+    return concat_df.to_excel(f"{savefilename}.xlsx", index=False)
