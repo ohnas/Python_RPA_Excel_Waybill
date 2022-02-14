@@ -8,6 +8,7 @@ from smartstore_single_insert import single_table_isert
 from smartstore_multi_check import multi_table_check
 from smartstore_multi_insert import multi_table_isert
 from smartstore_sample_save import sample_save
+from smartstore_waybill_save import waybill_save
 
 
 class Smartstore:
@@ -140,11 +141,24 @@ class Smartstore:
     def sample_file_save(self):
         self.openfilename = file_label_name.get()
         self.savefilename = filedialog.asksaveasfilename(
-            title="스마트스토어 파일을 선택하세요",
+            title="CJ대한통운 샘플 파일을 저장하세요",
             filetypes=(("EXCEL 파일", "*.xlsx"), ("모든파일", "*.*")),
             initialdir="C:\\Users\\오나성\Desktop\\Python_RPA_Excel_Waybill",
         )
         sample_save(self.openfilename, self.savefilename)
+
+    def waybill_file_add(self):
+        self.filename = filedialog.askopenfilename(
+            title="운송장 파일을 선택하세요",
+            filetypes=(("EXCEL 파일", "*.xlsx"), ("모든파일", "*.*")),
+            initialdir="C:\\Users\\오나성\Desktop",
+        )
+        waybill_label_name.insert(0, self.filename)
+
+    def waybill_file_save(self):
+        self.openfilename = waybill_label_name.get()
+        self.savefilename = file_label_name.get()
+        waybill_save(self.openfilename, self.savefilename)
 
 
 app = Smartstore()
@@ -156,7 +170,7 @@ window.resizable(True, True)
 
 ############ file_add ################
 file_frame = LabelFrame(window, text="파일", padx=5, pady=5)
-file_frame.pack(fill="x", padx=10, pady=20)
+file_frame.pack(fill="x", padx=10, pady=10)
 
 file_add_button = Button(
     file_frame,
@@ -191,7 +205,7 @@ file_label_name.pack(side="left", padx=5, pady=5)
 ###################################################
 ############ single_check_list btn ################
 single_frame = LabelFrame(window, text="단품 항목", padx=5, pady=5)
-single_frame.pack(fill="x", padx=10, pady=20)
+single_frame.pack(fill="x", padx=10, pady=10)
 
 single_check_button = Button(
     single_frame,
@@ -281,7 +295,7 @@ single_combobox_price.pack(side="left", padx=5, pady=5)
 #####################################################################################
 ############ multi_check_list btn ################
 multi_frame = LabelFrame(window, text="합포 항목", padx=5, pady=5)
-multi_frame.pack(fill="x", padx=10, pady=20)
+multi_frame.pack(fill="x", padx=10, pady=10)
 
 multi_check_button = Button(
     multi_frame,
@@ -372,7 +386,7 @@ multi_combobox_price.pack(side="left", padx=5, pady=5)
 #####################################################################################
 ############ sample_file_save ################
 save_file_frame = LabelFrame(window, text="샘플파일", padx=5, pady=5)
-save_file_frame.pack(fill="x", padx=10, pady=20)
+save_file_frame.pack(fill="x", padx=10, pady=10)
 
 save_sampel_file_button = Button(
     save_file_frame,
@@ -386,5 +400,40 @@ save_sampel_file_button = Button(
     command=app.sample_file_save,
 )
 save_sampel_file_button.pack(side="left")
+#####################################################################################
+############ waybill_file_save ################
+waybill_frame = LabelFrame(window, text="운송장파일", padx=5, pady=5)
+waybill_frame.pack(fill="x", padx=10, pady=10)
+
+select_waybill_file_button = Button(
+    waybill_frame,
+    relief="raised",
+    overrelief="solid",
+    text="운송장 파일 선택",
+    width=25,
+    height=2,
+    padx=2,
+    pady=2,
+    command=app.waybill_file_add,
+)
+select_waybill_file_button.pack(side="left")
+
+waybill_label = Label(waybill_frame, text="선택된 파일명 :")
+waybill_label.pack(side="left", padx=5, pady=5)
+waybill_label_name = Entry(waybill_frame, width=60)
+waybill_label_name.pack(side="left", padx=5, pady=5)
+
+save_waybill_file_button = Button(
+    waybill_frame,
+    relief="raised",
+    overrelief="solid",
+    text="운송장 파일 저장",
+    width=25,
+    height=2,
+    padx=2,
+    pady=2,
+    command=app.waybill_file_save,
+)
+save_waybill_file_button.pack(side="left")
 #####################################################################################
 window.mainloop()
