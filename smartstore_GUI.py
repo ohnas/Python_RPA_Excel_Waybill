@@ -19,11 +19,14 @@ class Smartstore:
         # app = Todayhome()
         # app.open_window()
 
+    def excel_file_path_change(self):
+        self.folder_selcted = filedialog.askdirectory()
+
     def excel_file_add(self):
         self.filename = filedialog.askopenfilename(
             title="스마트스토어 파일을 선택하세요",
             filetypes=(("EXCEL 파일", "*.xlsx"), ("모든파일", "*.*")),
-            initialdir="C:\\Users\\오나성\Desktop\\Python_RPA_Excel_Waybill",
+            initialdir="C:\\Users\\오나성\\Desktop\\Python_RPA_Excel_Waybill",
         )
         file_label_name.insert(0, self.filename)
 
@@ -164,19 +167,19 @@ class Smartstore:
 app = Smartstore()
 
 window = Tk()
-window.title("Tkinter_Test")
-window.geometry("1080x1000")
+window.title("스마트 스토어")
+window.geometry("1440x900")
 window.resizable(True, True)
 
 ############ file_add ################
-file_frame = LabelFrame(window, text="파일", padx=5, pady=5)
-file_frame.pack(fill="x", padx=10, pady=10)
+file_frame = LabelFrame(window, text="스마트 스토어", padx=5, pady=5)
+file_frame.pack(padx=10, pady=10, fill="x")
 
 file_add_button = Button(
     file_frame,
     relief="raised",
     overrelief="solid",
-    text="스마트스토어 파일 선택",
+    text="원본 파일 선택",
     width=20,
     height=2,
     padx=2,
@@ -185,7 +188,7 @@ file_add_button = Button(
 )
 file_add_button.pack(side="left")
 
-transform_button = Button(
+""" transform_button = Button(
     file_frame,
     relief="raised",
     overrelief="solid",
@@ -196,22 +199,42 @@ transform_button = Button(
     pady=2,
     command=app.window_transform,
 )
-transform_button.pack(side="right")
+transform_button.pack(side="right") """
 
 file_label = Label(file_frame, text="선택된 파일명 :")
 file_label.pack(side="left", padx=5, pady=5)
 file_label_name = Entry(file_frame, width=60)
 file_label_name.pack(side="left", padx=5, pady=5)
+
+file_path_label = Label(file_frame, text="현재 파일 경로 :")
+file_path_label.pack(side="left", padx=5, pady=5)
+file_path_default = StringVar(file_frame)
+file_path_default.set("hello world")
+file_path_label_name = Entry(file_frame, width=60, textvariable=file_path_default)
+file_path_label_name.pack(side="left", padx=5, pady=5)
+
+file_path_change_button = Button(
+    file_frame,
+    relief="raised",
+    overrelief="solid",
+    text="파일 선택 경로 변경",
+    width=20,
+    height=2,
+    padx=2,
+    pady=2,
+    command=app.excel_file_path_change,
+)
+file_path_change_button.pack(side="left")
 ###################################################
 ############ single_check_list btn ################
 single_frame = LabelFrame(window, text="단품 항목", padx=5, pady=5)
-single_frame.pack(fill="x", padx=10, pady=10)
+single_frame.pack(padx=10, pady=10, fill="x")
 
 single_check_button = Button(
     single_frame,
     relief="raised",
     overrelief="solid",
-    text="스마트스토어 단품 체크",
+    text="단품 체크",
     width=50,
     height=2,
     pady=2,
@@ -295,13 +318,13 @@ single_combobox_price.pack(side="left", padx=5, pady=5)
 #####################################################################################
 ############ multi_check_list btn ################
 multi_frame = LabelFrame(window, text="합포 항목", padx=5, pady=5)
-multi_frame.pack(fill="x", padx=10, pady=10)
+multi_frame.pack(padx=10, pady=10, fill="x")
 
 multi_check_button = Button(
     multi_frame,
     relief="raised",
     overrelief="solid",
-    text="스마트스토어 합포 체크",
+    text="합포 체크",
     width=50,
     height=2,
     pady=2,
@@ -384,12 +407,15 @@ multi_combobox_price = ttk.Combobox(
 multi_combobox_price.current(0)
 multi_combobox_price.pack(side="left", padx=5, pady=5)
 #####################################################################################
-############ sample_file_save ################
-save_file_frame = LabelFrame(window, text="샘플파일", padx=5, pady=5)
-save_file_frame.pack(fill="x", padx=10, pady=10)
+############ other_file_frame ################
+other_file_frame = LabelFrame(window, text="파일", padx=5, pady=5)
+other_file_frame.pack(padx=10, pady=10, fill="x")
+
+sample_frame = LabelFrame(other_file_frame, text="샘플 파일", padx=5, pady=5)
+sample_frame.grid(padx=10, pady=10, row=0, column=0)
 
 save_sampel_file_button = Button(
-    save_file_frame,
+    sample_frame,
     relief="raised",
     overrelief="solid",
     text="CJ대한통운 샘플 파일 생성",
@@ -400,10 +426,9 @@ save_sampel_file_button = Button(
     command=app.sample_file_save,
 )
 save_sampel_file_button.pack(side="left")
-#####################################################################################
-############ waybill_file_save ################
-waybill_frame = LabelFrame(window, text="운송장파일", padx=5, pady=5)
-waybill_frame.pack(fill="x", padx=10, pady=10)
+
+waybill_frame = LabelFrame(other_file_frame, text="운송장 파일", padx=5, pady=5)
+waybill_frame.grid(padx=10, pady=10, row=0, column=1)
 
 select_waybill_file_button = Button(
     waybill_frame,
@@ -434,6 +459,6 @@ save_waybill_file_button = Button(
     pady=2,
     command=app.waybill_file_save,
 )
-save_waybill_file_button.pack(side="left")
+save_waybill_file_button.pack(side="right")
 #####################################################################################
 window.mainloop()
