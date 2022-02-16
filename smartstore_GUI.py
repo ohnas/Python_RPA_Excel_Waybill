@@ -12,15 +12,9 @@ from smartstore_waybill_save import waybill_save
 
 
 class Smartstore:
-    def window_transform(self):
-        pass
-        # self.window = window
-        # self.window.destroy()
-        # app = Todayhome()
-        # app.open_window()
-
     def excel_file_path_change(self):
-        self.folder_selcted = filedialog.askdirectory()
+        # self.folder_selcted = filedialog.askdirectory()
+        pass
 
     def excel_file_add(self):
         self.filename = filedialog.askopenfilename(
@@ -163,6 +157,13 @@ class Smartstore:
         self.savefilename = file_label_name.get()
         waybill_save(self.openfilename, self.savefilename)
 
+    def window_transform(self):
+        pass
+        # self.window = window
+        # self.window.destroy()
+        # app = Todayhome()
+        # app.open_window()
+
 
 app = Smartstore()
 
@@ -188,25 +189,12 @@ file_add_button = Button(
 )
 file_add_button.pack(side="left")
 
-""" transform_button = Button(
-    file_frame,
-    relief="raised",
-    overrelief="solid",
-    text="창 전환",
-    width=20,
-    height=2,
-    padx=2,
-    pady=2,
-    command=app.window_transform,
-)
-transform_button.pack(side="right") """
-
 file_label = Label(file_frame, text="선택된 파일명 :")
 file_label.pack(side="left", padx=5, pady=5)
 file_label_name = Entry(file_frame, width=60)
 file_label_name.pack(side="left", padx=5, pady=5)
 
-file_path_label = Label(file_frame, text="현재 파일 경로 :")
+""" file_path_label = Label(file_frame, text="현재 파일 경로 :")
 file_path_label.pack(side="left", padx=5, pady=5)
 file_path_default = StringVar(file_frame)
 file_path_default.set("hello world")
@@ -224,7 +212,7 @@ file_path_change_button = Button(
     pady=2,
     command=app.excel_file_path_change,
 )
-file_path_change_button.pack(side="left")
+file_path_change_button.pack(side="left") """
 ###################################################
 ############ single_check_list btn ################
 single_frame = LabelFrame(window, text="단품 항목", padx=5, pady=5)
@@ -407,8 +395,8 @@ multi_combobox_price = ttk.Combobox(
 multi_combobox_price.current(0)
 multi_combobox_price.pack(side="left", padx=5, pady=5)
 #####################################################################################
-############ other_file_frame ################
-other_file_frame = LabelFrame(window, text="파일", padx=5, pady=5)
+############ other_file_frame and window_transform ################
+other_file_frame = LabelFrame(window, text="파일 및 창전환", padx=5, pady=5)
 other_file_frame.pack(padx=10, pady=10, fill="x")
 
 sample_frame = LabelFrame(other_file_frame, text="샘플 파일", padx=5, pady=5)
@@ -460,5 +448,30 @@ save_waybill_file_button = Button(
     command=app.waybill_file_save,
 )
 save_waybill_file_button.pack(side="right")
+
+transform_frame = LabelFrame(other_file_frame, text="창 전환", padx=5, pady=5)
+transform_frame.grid(padx=10, pady=10, row=0, column=2)
+
+transform_label = Label(transform_frame, text="이동 :")
+transform_label.pack(side="left", padx=5, pady=5)
+transform_option = ["선택", "오늘의 집", "펀샵", "리빙픽", "1300k"]
+transform_combobox = ttk.Combobox(
+    transform_frame, state="readonly", values=transform_option
+)
+transform_combobox.current(0)
+transform_combobox.pack(side="left", padx=5, pady=5)
+
+transform_button = Button(
+    transform_frame,
+    relief="raised",
+    overrelief="solid",
+    text="전환",
+    width=10,
+    height=2,
+    padx=2,
+    pady=2,
+    command=app.window_transform,
+)
+transform_button.pack(side="right")
 #####################################################################################
 window.mainloop()
