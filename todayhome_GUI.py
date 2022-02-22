@@ -9,18 +9,17 @@ from smartstore_multi_check import multi_table_check
 from smartstore_multi_insert import multi_table_isert
 from smartstore_sample_save import sample_save
 from smartstore_waybill_save import waybill_save
-from todayhome_GUI import Todayhome
 
 
-class Smartstore:
+class Todayhome:
     def open_window(self):
         self.window = Tk()
-        self.window.title("스마트 스토어")
+        self.window.title("오늘의 집")
         self.window.geometry("1440x900")
         self.window.resizable(True, True)
 
         ############ file_add ################
-        self.file_frame = LabelFrame(self.window, text="스마트 스토어", padx=5, pady=5)
+        self.file_frame = LabelFrame(self.window, text="오늘의 집", padx=5, pady=5)
         self.file_frame.pack(padx=10, pady=10, fill="x")
 
         self.file_add_button = Button(
@@ -32,7 +31,7 @@ class Smartstore:
             height=2,
             padx=2,
             pady=2,
-            command=smartstore_app.excel_file_add,
+            command=today_app.excel_file_add,
         )
         self.file_add_button.pack(side="left")
 
@@ -73,7 +72,7 @@ class Smartstore:
             width=50,
             height=2,
             pady=2,
-            command=smartstore_app.is_single_new_item_check,
+            command=today_app.is_single_new_item_check,
         )
         self.single_check_button.pack()
         ##################################################
@@ -104,7 +103,7 @@ class Smartstore:
             height=2,
             padx=2,
             pady=2,
-            command=smartstore_app.single_move_button,
+            command=today_app.single_move_button,
         )
         self.single_move_btn.pack(side="bottom")
         ###################################################
@@ -121,7 +120,7 @@ class Smartstore:
             height=2,
             padx=2,
             pady=2,
-            command=smartstore_app.single_save_button,
+            command=today_app.single_save_button,
         )
         self.single_save_btn.pack(side="right")
 
@@ -165,7 +164,7 @@ class Smartstore:
             width=50,
             height=2,
             pady=2,
-            command=smartstore_app.is_multi_new_item_check,
+            command=today_app.is_multi_new_item_check,
         )
         self.multi_check_button.pack()
         ############################################
@@ -197,7 +196,7 @@ class Smartstore:
             height=2,
             padx=2,
             pady=2,
-            command=smartstore_app.multi_move_button,
+            command=today_app.multi_move_button,
         )
         self.multi_move_btn.pack(side="bottom")
         ###################################################
@@ -214,7 +213,7 @@ class Smartstore:
             height=2,
             padx=2,
             pady=2,
-            command=smartstore_app.multi_save_button,
+            command=today_app.multi_save_button,
         )
         self.multi_save_btn.pack(side="right")
 
@@ -264,7 +263,7 @@ class Smartstore:
             height=2,
             padx=2,
             pady=2,
-            command=smartstore_app.sample_file_save,
+            command=today_app.sample_file_save,
         )
         self.save_sampel_file_button.pack(side="left")
 
@@ -282,7 +281,7 @@ class Smartstore:
             height=2,
             padx=2,
             pady=2,
-            command=smartstore_app.waybill_file_add,
+            command=today_app.waybill_file_add,
         )
         self.select_waybill_file_button.pack(side="left")
 
@@ -300,7 +299,7 @@ class Smartstore:
             height=2,
             padx=2,
             pady=2,
-            command=smartstore_app.waybill_file_save,
+            command=today_app.waybill_file_save,
         )
         save_waybill_file_button.pack(side="right")
 
@@ -327,7 +326,7 @@ class Smartstore:
             height=2,
             padx=2,
             pady=2,
-            command=smartstore_app.window_transform,
+            command=today_app.window_transform,
         )
         self.transform_button.pack(side="right")
         #####################################################################################
@@ -493,9 +492,6 @@ class Smartstore:
         self.selection_platform = self.transform_combobox.get()
         if self.selection_platform == "오늘의 집":
             self.window.destroy()
-            today_app = Todayhome()
-            today_app.open_window()
 
 
-smartstore_app = Smartstore()
-smartstore_app.open_window()
+today_app = Todayhome()
