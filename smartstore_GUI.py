@@ -40,26 +40,6 @@ class Smartstore:
         self.file_label.pack(side="left", padx=5, pady=5)
         self.file_label_name = Entry(self.file_frame, width=60)
         self.file_label_name.pack(side="left", padx=5, pady=5)
-
-        """ file_path_label = Label(file_frame, text="현재 파일 경로 :")
-        file_path_label.pack(side="left", padx=5, pady=5)
-        file_path_default = StringVar(file_frame)
-        file_path_default.set("hello world")
-        file_path_label_name = Entry(file_frame, width=60, textvariable=file_path_default)
-        file_path_label_name.pack(side="left", padx=5, pady=5)
-
-        file_path_change_button = Button(
-            file_frame,
-            relief="raised",
-            overrelief="solid",
-            text="파일 선택 경로 변경",
-            width=20,
-            height=2,
-            padx=2,
-            pady=2,
-            command=app.excel_file_path_change,
-        )
-        file_path_change_button.pack(side="left") """
         ###################################################
         ############ single_check_list btn ################
         self.single_frame = LabelFrame(self.window, text="단품 항목", padx=5, pady=5)
@@ -291,7 +271,7 @@ class Smartstore:
         self.waybill_label_name = Entry(self.waybill_frame, width=60)
         self.waybill_label_name.pack(side="left", padx=5, pady=5)
 
-        save_waybill_file_button = Button(
+        self.save_waybill_file_button = Button(
             self.waybill_frame,
             relief="raised",
             overrelief="solid",
@@ -302,7 +282,7 @@ class Smartstore:
             pady=2,
             command=smartstore_app.waybill_file_save,
         )
-        save_waybill_file_button.pack(side="right")
+        self.save_waybill_file_button.pack(side="right")
 
         self.transform_frame = LabelFrame(
             self.other_file_frame, text="창 전환", padx=5, pady=5
@@ -333,22 +313,18 @@ class Smartstore:
         #####################################################################################
         self.window.mainloop()
 
-    def excel_file_path_change(self):
-        # self.folder_selcted = filedialog.askdirectory()
-        pass
-
     def excel_file_add(self):
-        self.filename = filedialog.askopenfilename(
+        filename = filedialog.askopenfilename(
             title="스마트스토어 파일을 선택하세요",
             filetypes=(("EXCEL 파일", "*.xlsx"), ("모든파일", "*.*")),
             initialdir="C:\\Users\\오나성\\Desktop\\Python_RPA_Excel_Waybill",
         )
-        self.file_label_name.insert(0, self.filename)
+        self.file_label_name.insert(0, filename)
 
     def is_single_new_item_check(self):
-        self.filename = self.file_label_name.get()
+        filename = self.file_label_name.get()
         new_items_list = single_table_check(
-            self.filename
+            filename
         )  # single_table_check 함수에서 return 값 받아옴
         # 받아온 리스트에 항목이 없으면 메시지 띄우기 항목이 있으면 리스트 박스에 표시하기
         if len(new_items_list) == 0:
@@ -358,11 +334,11 @@ class Smartstore:
                 self.single_list.insert(END, item)
 
     def single_move_button(self):
-        self.selection_item = (
+        selection_item = (
             self.single_list.curselection()
         )  # 리스트 박스에서 선택한 아이템 선택 method는 curselection
         selection_item_list = list(
-            self.single_list.get(self.selection_item[0])
+            self.single_list.get(selection_item[0])
         )  # 선택한 항목의 값으 get() 하고 list로 변환
         self.single_label_product_name.insert(
             0, selection_item_list[0]
@@ -370,31 +346,29 @@ class Smartstore:
         self.single_label_quantity_name.insert(
             0, selection_item_list[1]
         )  # 리스트에서 수량은 수량 Entry 로 보내기
-        self.single_list.delete(self.selection_item)  # 보내기가 완료되었다면 선택했었던 항목은 지워버리기
+        self.single_list.delete(selection_item)  # 보내기가 완료되었다면 선택했었던 항목은 지워버리기
 
     def single_save_button(self):
-        self.selection_product = (
+        selection_product = (
             self.single_label_product_name.get()
         )  # 보낸 품목명의 값을 가져오기 get()
-        self.selection_quantity = int(
+        selection_quantity = int(
             self.single_label_quantity_name.get()
         )  # 보낸 수량의 값을 가져오기 get()
-        self.selection_type = (
-            self.single_combobox_type.get()
-        )  # combobox에서 고른 값 가져오기 get()
-        self.selection_price = int(
+        selection_type = self.single_combobox_type.get()  # combobox에서 고른 값 가져오기 get()
+        selection_price = int(
             self.single_combobox_price.get()
         )  # combobox에서 고른 값 가져오기 get()
-        self.selection_item = []
-        self.selection_item.append(self.selection_product)  # get 한 값들 빈 리스트에 append
-        self.selection_item.append(self.selection_quantity)  # get 한 값들 빈 리스트에 append
-        self.selection_item.append(self.selection_type)  # get 한 값들 빈 리스트에 append
-        self.selection_item.append(self.selection_price)  # get 한 값들 빈 리스트에 append
-        self.selection_items = tuple(
-            self.selection_item
+        selection_item = []
+        selection_item.append(selection_product)  # get 한 값들 빈 리스트에 append
+        selection_item.append(selection_quantity)  # get 한 값들 빈 리스트에 append
+        selection_item.append(selection_type)  # get 한 값들 빈 리스트에 append
+        selection_item.append(selection_price)  # get 한 값들 빈 리스트에 append
+        selection_items = tuple(
+            selection_item
         )  # 리스트 값들 전부 tuple로 변환(데이터 베이스로 insert 하기 위해서)
         single_table_isert(
-            self.selection_items
+            selection_items
         )  # 변환시킨 tuple을 single_table_insert 함수의 인자로 보내기
         self.single_label_product_name.delete(0, END)  # 표시되어 있는 품목명 delete
         self.single_label_quantity_name.delete(0, END)  # 표시되어 있는 수량 delete
@@ -402,58 +376,56 @@ class Smartstore:
         self.single_combobox_price.current(0)  # 표시되어 있는 combobox 항목 초기화
 
     def is_multi_new_item_check(self):
-        self.filename = self.file_label_name.get()
-        self.new_items_list = multi_table_check(
-            self.filename
+        filename = self.file_label_name.get()
+        new_items_list = multi_table_check(
+            filename
         )  # single_table_check 함수에서 return 값 받아옴
         # 받아온 리스트에 항목이 없으면 메시지 띄우기 항목이 있으면 리스트 박스에 표시하기
-        if len(self.new_items_list) == 0:
+        if len(new_items_list) == 0:
             msg.showinfo("알림", "새로운 항목이 없습니다.")
         else:
-            for item in self.new_items_list:
+            for item in new_items_list:
                 self.multi_list.insert(END, item)
 
     def multi_move_button(self):
-        self.selection_item = (
+        selection_item = (
             self.multi_list.curselection()
         )  # 리스트 박스에서 선택한 아이템 선택 method는 curselection
-        self.selection_item_list = []
+        selection_item_list = []
         # 선택한 아이템의 값을 get 해서 list 로 만들기
-        for item in self.selection_item:
+        for item in selection_item:
             get_item = self.multi_list.get(item)
-            self.selection_item_list.append(get_item)
+            selection_item_list.append(get_item)
         # list로 만든 아이템들을 listbox 로 insert
-        for item in self.selection_item_list:
+        for item in selection_item_list:
             self.multi_label_product_name.insert(END, item[2])
             self.multi_label_quantity_name.insert(END, item[3])
-        self.multi_list.delete(self.selection_item[0], self.selection_item[-1])
+        self.multi_list.delete(selection_item[0], selection_item[-1])
 
     def multi_save_button(self):
-        self.selection_product = list(
+        selection_product = list(
             self.multi_label_product_name.get(0, END)
         )  # 보낸 품목명의 값을 가져오기 get() 해서 list
-        self.selection_quantity = list(
+        selection_quantity = list(
             self.multi_label_quantity_name.get(0, END)
         )  # 보낸 수량의 값을 가져오기 get() 해서 list
-        self.selection_type = (
-            self.multi_combobox_type.get()
-        )  # combobox에서 고른 값 가져오기 get()
-        self.selection_price = int(
+        selection_type = self.multi_combobox_type.get()  # combobox에서 고른 값 가져오기 get()
+        selection_price = int(
             self.multi_combobox_price.get()
         )  # combobox에서 고른 값 가져오기 get()
-        self.selection_items = []
+        selection_items = []
         # 각각의 독립적인 list 들을 하나의 list 작업 하기
-        while len(self.selection_product) != 0 and len(self.selection_quantity) != 0:
-            self.selection_item = []
-            self.selection_item.append(self.selection_product[0])
-            self.selection_item.append(self.selection_quantity[0])
-            self.selection_item.append(self.selection_type)
-            self.selection_item.append(self.selection_price)
-            self.selection_items.append(self.selection_item)
-            del self.selection_product[0]
-            del self.selection_quantity[0]
+        while len(selection_product) != 0 and len(selection_quantity) != 0:
+            selection_item = []
+            selection_item.append(selection_product[0])
+            selection_item.append(selection_quantity[0])
+            selection_item.append(selection_type)
+            selection_item.append(selection_price)
+            selection_items.append(selection_item)
+            del selection_product[0]
+            del selection_quantity[0]
         multi_table_isert(
-            self.selection_items
+            selection_items
         )  # list로 만든 값들을 multi_table_insert 함수의 인자로 보내기
         self.multi_label_product_name.delete(0, END)  # 표시되어 있는 품목명 delete
         self.multi_label_quantity_name.delete(0, END)  # 표시되어 있는 수량 delete
@@ -462,40 +434,41 @@ class Smartstore:
 
     def sample_file_save(self):
         # 최초의 가져온 원본 excel file 가져오기
-        self.openfilename = self.file_label_name.get()
+        openfilename = self.file_label_name.get()
         # 샘플 파일을 저장할 경로 설정
-        self.savefilename = filedialog.asksaveasfilename(
+        savefilename = filedialog.asksaveasfilename(
             title="CJ대한통운 샘플 파일을 저장하세요",
             filetypes=(("EXCEL 파일", "*.xlsx"), ("모든파일", "*.*")),
             initialdir="C:\\Users\\오나성\Desktop\\Python_RPA_Excel_Waybill",
         )
         # sample_save 의 인자로 2개의 변수 보내주기
-        sample_save(self.openfilename, self.savefilename)
+        sample_save(openfilename, savefilename)
 
     def waybill_file_add(self):
         # 운송장 파일을 가져오기
-        self.filename = filedialog.askopenfilename(
+        filename = filedialog.askopenfilename(
             title="운송장 파일을 선택하세요",
             filetypes=(("EXCEL 파일", "*.xlsx"), ("모든파일", "*.*")),
             initialdir="C:\\Users\\오나성\Desktop",
         )
-        self.waybill_label_name.insert(0, self.filename)
+        self.waybill_label_name.insert(0, filename)
 
     def waybill_file_save(self):
         # 가져온 운송장 파일을 변수로 저장
-        self.openfilename = self.waybill_label_name.get()
+        openfilename = self.waybill_label_name.get()
         # 원본파일을 변수로 저장
-        self.savefilename = self.file_label_name.get()
+        savefilename = self.file_label_name.get()
         # waybill_save 의 인자로 2개의 변수 보내주기
-        waybill_save(self.openfilename, self.savefilename)
+        waybill_save(openfilename, savefilename)
 
     def window_transform(self):
-        self.selection_platform = self.transform_combobox.get()
-        if self.selection_platform == "오늘의 집":
+        selection_platform = self.transform_combobox.get()
+        if selection_platform == "오늘의 집":
             self.window.destroy()
             today_app = Todayhome()
             today_app.open_window()
 
 
-smartstore_app = Smartstore()
-smartstore_app.open_window()
+if __name__ == "__main__":
+    smartstore_app = Smartstore()
+    smartstore_app.open_window()
