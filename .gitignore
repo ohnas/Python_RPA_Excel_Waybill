@@ -6,3 +6,5 @@ practice2.py
 practice3.py
 __pycache__/
 *.xls
+*.pyc
+*.pickle
