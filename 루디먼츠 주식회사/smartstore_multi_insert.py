@@ -19,7 +19,10 @@ def multi_table_isert(selection_items):
         db_cursor.execute(get_maxid_multi_sql)
         multi_table_maxid = db_cursor.fetchone()
         db_cursor.close()
-        index_value = multi_table_maxid["MAX(id)"] + 1  # 가장 큰 id 값보다 1 증가한  id로 만들기
+        if multi_table_maxid["MAX(id)"] == None:
+            index_value = 1  # multi table에 아무 데이터가 없다면 초기 id 값을 1로 설정해주어야함 데이터가 없으면 max id = none 으로 나오기 때문에
+        else:
+            index_value = multi_table_maxid["MAX(id)"] + 1  # 가장 큰 id 값보다 1 증가한  id로 만들기
         post_items = []
         for item in selection_items:
             post_item = (
