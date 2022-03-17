@@ -9,17 +9,23 @@ from smartstore_multi_check import multi_table_check
 from smartstore_multi_insert import multi_table_isert
 from smartstore_sample_save import sample_save
 from smartstore_waybill_save import waybill_save
+from smartstore_file_path import row_file_new_path
+from smartstore_file_path import row_file_saved_path
+from smartstore_file_path import sample_file_new_path
+from smartstore_file_path import sample_file_saved_path
+from smartstore_file_path import waybill_file_new_path
+from smartstore_file_path import waybill_file_saved_path
 
 
 class Todayhome:
     def open_window(self):
         self.window = Tk()
         self.window.title("오늘의 집")
-        self.window.geometry("1440x900")
+        self.window.geometry("1650x1000")
         self.window.resizable(True, True)
 
         ############ file_add ################
-        self.file_frame = LabelFrame(self.window, text="오늘의 집", padx=5, pady=5)
+        self.file_frame = LabelFrame(self.window, text="스마트 스토어", padx=5, pady=5)
         self.file_frame.pack(padx=10, pady=10, fill="x")
 
         self.file_add_button = Button(
@@ -31,7 +37,7 @@ class Todayhome:
             height=2,
             padx=2,
             pady=2,
-            command=today_app.excel_file_add,
+            command=todayhome_app.excel_file_add,
         )
         self.file_add_button.pack(side="left")
 
@@ -39,6 +45,29 @@ class Todayhome:
         self.file_label.pack(side="left", padx=5, pady=5)
         self.file_label_name = Entry(self.file_frame, width=60)
         self.file_label_name.pack(side="left", padx=5, pady=5)
+
+        self.file_path_var = StringVar()
+        self.file_path_var.set(row_file_saved_path())
+
+        self.file_path_label = Label(self.file_frame, text="현재 파일저장 경로 :")
+        self.file_path_label.pack(side="left", padx=5, pady=5)
+        self.file_path_label_name = Entry(
+            self.file_frame, width=60, textvariable=self.file_path_var
+        )
+        self.file_path_label_name.pack(side="left", padx=5, pady=5)
+
+        self.file_path_button = Button(
+            self.file_frame,
+            relief="raised",
+            overrelief="solid",
+            text="저장 경로 변경",
+            width=20,
+            height=2,
+            padx=2,
+            pady=2,
+            command=todayhome_app.excel_file_path,
+        )
+        self.file_path_button.pack(side="left")
         ###################################################
         ############ single_check_list btn ################
         self.single_frame = LabelFrame(self.window, text="단품 항목", padx=5, pady=5)
@@ -52,7 +81,7 @@ class Todayhome:
             width=50,
             height=2,
             pady=2,
-            command=today_app.is_single_new_item_check,
+            command=todayhome_app.is_single_new_item_check,
         )
         self.single_check_button.pack()
         ##################################################
@@ -83,7 +112,7 @@ class Todayhome:
             height=2,
             padx=2,
             pady=2,
-            command=today_app.single_move_button,
+            command=todayhome_app.single_move_button,
         )
         self.single_move_btn.pack(side="bottom")
         ###################################################
@@ -100,7 +129,7 @@ class Todayhome:
             height=2,
             padx=2,
             pady=2,
-            command=today_app.single_save_button,
+            command=todayhome_app.single_save_button,
         )
         self.single_save_btn.pack(side="right")
 
@@ -144,7 +173,7 @@ class Todayhome:
             width=50,
             height=2,
             pady=2,
-            command=today_app.is_multi_new_item_check,
+            command=todayhome_app.is_multi_new_item_check,
         )
         self.multi_check_button.pack()
         ############################################
@@ -176,7 +205,7 @@ class Todayhome:
             height=2,
             padx=2,
             pady=2,
-            command=today_app.multi_move_button,
+            command=todayhome_app.multi_move_button,
         )
         self.multi_move_btn.pack(side="bottom")
         ###################################################
@@ -189,11 +218,11 @@ class Todayhome:
             relief="raised",
             overrelief="solid",
             text="저장",
-            width=10,
+            width=7,
             height=2,
             padx=2,
             pady=2,
-            command=today_app.multi_save_button,
+            command=todayhome_app.multi_save_button,
         )
         self.multi_save_btn.pack(side="right")
 
@@ -243,14 +272,37 @@ class Todayhome:
             height=2,
             padx=2,
             pady=2,
-            command=today_app.sample_file_save,
+            command=todayhome_app.sample_file_save,
         )
         self.save_sampel_file_button.pack(side="left")
+
+        self.sample_path_var = StringVar()
+        self.sample_path_var.set(sample_file_saved_path())
+
+        self.sample_path_label = Label(self.sample_frame, text="현재 파일저장 경로 :")
+        self.sample_path_label.pack(side="left", padx=5, pady=5)
+        self.sample_path_label_name = Entry(
+            self.sample_frame, width=30, textvariable=self.sample_path_var
+        )
+        self.sample_path_label_name.pack(side="left", padx=5, pady=5)
+
+        self.sample_path_button = Button(
+            self.sample_frame,
+            relief="raised",
+            overrelief="solid",
+            text="저장 경로 변경",
+            width=15,
+            height=2,
+            padx=2,
+            pady=2,
+            command=todayhome_app.sample_file_path,
+        )
+        self.sample_path_button.pack(side="bottom")
 
         self.waybill_frame = LabelFrame(
             self.other_file_frame, text="운송장 파일", padx=5, pady=5
         )
-        self.waybill_frame.grid(padx=10, pady=10, row=0, column=1)
+        self.waybill_frame.grid(padx=10, pady=10, row=1, column=0, columnspan=2)
 
         self.select_waybill_file_button = Button(
             self.waybill_frame,
@@ -261,7 +313,7 @@ class Todayhome:
             height=2,
             padx=2,
             pady=2,
-            command=today_app.waybill_file_add,
+            command=todayhome_app.waybill_file_add,
         )
         self.select_waybill_file_button.pack(side="left")
 
@@ -277,16 +329,39 @@ class Todayhome:
             text="운송장 파일 저장",
             width=25,
             height=2,
-            padx=2,
+            padx=5,
             pady=2,
-            command=today_app.waybill_file_save,
+            command=todayhome_app.waybill_file_save,
         )
         self.save_waybill_file_button.pack(side="right")
+
+        self.waybill_path_var = StringVar()
+        self.waybill_path_var.set(waybill_file_saved_path())
+
+        self.waybill_path_label = Label(self.waybill_frame, text="현재 파일저장 경로 :")
+        self.waybill_path_label.pack(side="left", padx=5, pady=5)
+        self.waybill_path_label_name = Entry(
+            self.waybill_frame, width=60, textvariable=self.waybill_path_var
+        )
+        self.waybill_path_label_name.pack(side="left", padx=5, pady=5)
+
+        self.waybill_path_button = Button(
+            self.waybill_frame,
+            relief="raised",
+            overrelief="solid",
+            text="저장 경로 변경",
+            width=15,
+            height=2,
+            padx=5,
+            pady=2,
+            command=todayhome_app.waybill_file_path,
+        )
+        self.waybill_path_button.pack(side="left")
 
         self.transform_frame = LabelFrame(
             self.other_file_frame, text="창 전환", padx=5, pady=5
         )
-        self.transform_frame.grid(padx=10, pady=10, row=0, column=2)
+        self.transform_frame.grid(padx=10, pady=10, row=0, column=1)
 
         self.transform_label = Label(self.transform_frame, text="이동 :")
         self.transform_label.pack(side="left", padx=5, pady=5)
@@ -306,19 +381,27 @@ class Todayhome:
             height=2,
             padx=2,
             pady=2,
-            command=today_app.window_transform,
+            command=todayhome_app.window_transform,
         )
         self.transform_button.pack(side="right")
         #####################################################################################
         self.window.mainloop()
 
     def excel_file_add(self):
+        path = self.file_path_label_name.get()
         filename = filedialog.askopenfilename(
             title="스마트스토어 파일을 선택하세요",
             filetypes=(("EXCEL 파일", "*.xlsx"), ("모든파일", "*.*")),
-            initialdir="C:\\Users\\오나성\\Desktop\\Python_RPA_Excel_Waybill",
+            initialdir=f"{path}",
         )
         self.file_label_name.insert(0, filename)
+
+    def excel_file_path(self):
+        folder_selected = filedialog.askdirectory()
+        row_file_new_path(folder_selected)
+        path = row_file_saved_path()
+        self.file_path_label_name.delete(0, END)
+        self.file_path_label_name.insert(0, path)
 
     def is_single_new_item_check(self):
         filename = self.file_label_name.get()
@@ -432,23 +515,32 @@ class Todayhome:
         self.multi_combobox_price.current(0)  # 표시되어 있는 combobox 항목 초기화
 
     def sample_file_save(self):
+        path = self.sample_path_label_name.get()
         # 최초의 가져온 원본 excel file 가져오기
         openfilename = self.file_label_name.get()
         # 샘플 파일을 저장할 경로 설정
         savefilename = filedialog.asksaveasfilename(
             title="CJ대한통운 샘플 파일을 저장하세요",
             filetypes=(("EXCEL 파일", "*.xlsx"), ("모든파일", "*.*")),
-            initialdir="C:\\Users\\오나성\Desktop\\Python_RPA_Excel_Waybill",
+            initialdir=f"{path}",
         )
         # sample_save 의 인자로 2개의 변수 보내주기
         sample_save(openfilename, savefilename)
 
+    def sample_file_path(self):
+        folder_selected = filedialog.askdirectory()
+        sample_file_new_path(folder_selected)
+        path = sample_file_saved_path()
+        self.sample_path_label_name.delete(0, END)
+        self.sample_path_label_name.insert(0, path)
+
     def waybill_file_add(self):
+        path = self.waybill_path_label_name.get()
         # 운송장 파일을 가져오기
         filename = filedialog.askopenfilename(
             title="운송장 파일을 선택하세요",
             filetypes=(("EXCEL 파일", "*.xlsx"), ("모든파일", "*.*")),
-            initialdir="C:\\Users\\오나성\Desktop",
+            initialdir=f"{path}",
         )
         self.waybill_label_name.insert(0, filename)
 
@@ -460,10 +552,15 @@ class Todayhome:
         # waybill_save 의 인자로 2개의 변수 보내주기
         waybill_save(openfilename, savefilename)
 
+    def waybill_file_path(self):
+        folder_selected = filedialog.askdirectory()
+        waybill_file_new_path(folder_selected)
+        path = waybill_file_saved_path()
+        self.waybill_path_label_name.delete(0, END)
+        self.waybill_path_label_name.insert(0, path)
+
     def window_transform(self):
-        selection_platform = self.transform_combobox.get()
-        # if selection_platform == "오늘의 집":
-        # self.window.destroy()
+        pass
 
 
-today_app = Todayhome()
+todayhome_app = Todayhome()

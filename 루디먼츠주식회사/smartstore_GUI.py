@@ -23,7 +23,7 @@ class Smartstore:
     def open_window(self):
         self.window = Tk()
         self.window.title("스마트 스토어")
-        self.window.geometry("1440x900")
+        self.window.geometry("1650x1000")
         self.window.resizable(True, True)
 
         ############ file_add ################
@@ -565,8 +565,8 @@ class Smartstore:
         selection_platform = self.transform_combobox.get()
         if selection_platform == "오늘의 집":
             self.window.destroy()
-            today_app = Todayhome()
-            today_app.open_window()
+            todayhome_app = Todayhome()
+            todayhome_app.open_window()
 
 
 if __name__ == "__main__":
